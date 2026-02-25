@@ -305,6 +305,7 @@ public partial class AppRatingService : IAppRatingService
     #endregion
 
     #region Platform-Specific Methods (Partial)
+#if ANDROID || IOS || MACCATALYST || WINDOWS || TIZEN
     /// <summary>
     /// Platform-specific implementation to open the store rating page.
     /// </summary>
@@ -315,5 +316,26 @@ public partial class AppRatingService : IAppRatingService
     /// Returns false if not supported or failed.
     /// </summary>
     private partial Task<bool> TryNativeInAppReviewAsync();
+#else
+    /// <summary>
+    /// Platform-specific implementation to open the store rating page.
+    /// Not supported on standard .NET targets.
+    /// </summary>
+    private Task<bool> PlatformOpenStoreAsync()
+    {
+        logger?.LogWarning("PlatformOpenStoreAsync is not supported on standard .NET target");
+        return Task.FromResult(false);
+    }
+
+    /// <summary>
+    /// Platform-specific implementation to try native in-app review.
+    /// Not supported on standard .NET targets.
+    /// </summary>
+    private Task<bool> TryNativeInAppReviewAsync()
+    {
+        logger?.LogWarning("TryNativeInAppReviewAsync is not supported on standard .NET target");
+        return Task.FromResult(false);
+    }
+#endif
     #endregion
 }
