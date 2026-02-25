@@ -22,7 +22,7 @@
         <PackageVersion Include="CommunityToolkit.Maui" Version="12.2.0" />
 
         <!-- MAUI Framework -->
-        <PackageVersion Condition="$(TargetFramework.StartsWith('net9'))" Include="Microsoft.Maui.Controls" Version="$(MauiVersion9)" />
+        <PackageVersion Include="Microsoft.Maui.Controls" Version="$(MauiVersion9)" />
     </ItemGroup>
 
 	<ItemGroup Condition="'$(TargetFramework)' == 'net9.0-android'">
