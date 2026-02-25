@@ -14,7 +14,7 @@ Task("Restore")
     .IsDependentOn("Clean")
     .Does(() =>
 {
-    DotNetRestore("GamaLearn.Maui.sln");
+    DotNetRestore("GamaLearn.Maui.pack.slnf");
 });
 
 Task("Build")
@@ -35,7 +35,7 @@ Task("Build")
         FileName = "./Binlog/build.binlog"
     };
 
-    DotNetBuild("GamaLearn.Maui.sln", settings);
+    DotNetBuild("GamaLearn.Maui.pack.slnf", settings);
 });
 
 Task("Test")
