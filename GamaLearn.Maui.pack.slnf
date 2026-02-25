@@ -1,0 +1,8 @@
+{
+  "solution": {
+    "path": "GamaLearn.Maui.sln",
+    "projects": [
+      "source\\GamaLearn.Maui.Core\\GamaLearn.Maui.Core.csproj"
+    ]
+  }
+}

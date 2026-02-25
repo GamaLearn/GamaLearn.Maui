@@ -1,0 +1,28 @@
+<Project>
+	<Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))" />
+
+	<PropertyGroup Label="Build">
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+	</PropertyGroup>
+
+	<PropertyGroup Label="Signing">
+		<SignAssembly>false</SignAssembly>
+	</PropertyGroup>
+
+	<PropertyGroup Label="Source Link">
+		<!-- Optional: Declare that the Repository URL can be published to NuSpec -->
+		<PublishRepositoryUrl>fakse</PublishRepositoryUrl>
+		<!-- Optional: Embed source files that are not tracked by the source control manager to the PDB -->
+		<EmbedUntrackedSources>fakse</EmbedUntrackedSources>
+		<!-- Enable/Disable Source Link -->
+		<EnableSourceLink>false</EnableSourceLink>
+		<!-- Optional: Include PDB in the built .nupkg -->
+		<AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+	</PropertyGroup>
+
+	<ItemGroup Label="Files">
+		<None Include="..\..\Images\Icon.png" Pack="true" PackagePath="\" />
+		<None Include="..\..\README.md" Pack="true" PackagePath="\" />
+	</ItemGroup>
+</Project>
