@@ -1,96 +1,207 @@
+# GAMALEARN BUILD & PUBLISH WORKFLOW
+#
+# FEATURES:
+#   Cake Build Script - Professional build automation
+#   Matrix OS - Can run on multiple operating systems
+#   DocFX Documentation - Auto-generated API docs deployed to GitHub Pages
+#   GitHub Packages - Publishes pre-release packages for testing
+#   NuGet.org - Publishes release packages
+#   MinVer - Auto-versioning from Git tags
+#
 # TRIGGERS:
-#   - Push tag (e.g., 1.0.0 or 1.0.0-preview) → Build, Test, Pack, Publish to NuGet
+#   - Push to main       → Build, Test, Pack, Push to GitHub Packages
+#   - Pull request       → Build, Test, Pack
+#   - Release published  → Build, Test, Pack, Push to NuGet.org
+#   - Manual trigger     → Build, Test, Pack
 #
 # HOW TO RELEASE:
-#   1. git tag 1.0.0
-#   2. git push origin 1.0.0
-#   3. GitHub Actions automatically builds - MinVer reads version from tag
-#
-# IMPORTANT:
-#   - Tags must be semantic versions (e.g., 1.0.0, 2.1.3, 1.0.0-preview)
-#   - fetch-depth: 0 is REQUIRED for MinVer to find tags
+#   1. git tag v1.0.0
+#   2. git push origin v1.0.0
+#   3. Go to GitHub → Releases → Create release from tag
+#   4. Publish release → Workflow publishes to NuGet.org
 
-name: Build & Release
-
+name: Build
+# TRIGGERS
 on:
   push:
-    tags:
-      - '*'  # Trigger on any tag push
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  release:
+    types:
+      - published
 
+  workflow_dispatch:
+# ENVIRONMENT VARIABLES
 env:
-  DOTNET_VERSION: '9.0.x'
-  BUILD_CONFIGURATION: 'Release'
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
   DOTNET_CLI_TELEMETRY_OPTOUT: true
   DOTNET_NOLOGO: true
-
+  MINVERBUILDMETADATA: build.${{ github.run_number }}
+# JOBS
 jobs:
+  # JOB 1: BUILD
   build:
-    name: Build, Test & Pack
-    runs-on: windows-latest
-
+    name: Build-${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [windows-latest]
     steps:
-      # Checkout - MUST have fetch-depth: 0 for MinVer
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Required for MinVer to find tags
-
-      # Setup .NET SDK
-      - name: Setup .NET SDK
-        uses: actions/setup-dotnet@v4
+          fetch-depth: 0
+          lfs: true
+      - name: Setup Java JDK
+        uses: actions/setup-java@v4
         with:
-          dotnet-version: ${{ env.DOTNET_VERSION }}
+          distribution: 'temurin'
+          java-version: '17'
 
-      # Verify .NET installation
-      - name: Check .NET SDKs and Runtimes
+      - name: validate java config
+        shell: powershell
         run: |
-          dotnet --list-sdks
-          dotnet --version
+          java --version
+          echo $ENV:JAVA_HOME
 
-      # Install MAUI workload
-      - name: Install MAUI workloads
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: '9.0.x'
+
+      - name: Install MAUI workload
         run: |
           dotnet nuget locals all --clear
           dotnet workload install ios maccatalyst maui android --version 9.0.304
 
-      # Restore dependencies
-      - name: Restore dependencies
-        run: dotnet restore GamaLearn.Maui.sln
+      - name: Restore .NET tools
+        run: dotnet tool restore
 
-      # Build solution
-      - name: Build solution
-        run: dotnet build GamaLearn.Maui.sln --configuration ${{ env.BUILD_CONFIGURATION }} --no-restore
+      - name: Cake Build
+        run: dotnet cake --target=Build
+        shell: pwsh
 
-      # Run tests (if you have tests in the future)
-      # Uncomment when you add test projects
-      # - name: Run tests
-      #   run: dotnet test GamaLearn.Maui.sln --configuration ${{ env.BUILD_CONFIGURATION }} --no-build --verbosity normal
+      - name: Cake Test
+        run: dotnet cake --target=Test
+        shell: pwsh
 
-      # Pack NuGet packages (MinVer sets version automatically from git tag)
-      - name: Pack NuGet packages
-        run: dotnet pack GamaLearn.Maui.pack.slnf --configuration ${{ env.BUILD_CONFIGURATION }} --no-build --output ./Artifacts
+      - name: Cake Pack
+        run: dotnet cake --target=Pack
+        shell: pwsh
 
-      # Upload artifacts
-      - name: Upload NuGet packages
-        uses: actions/upload-artifact@v4
+      - name: Build Documentation - Metadata
+        run: dotnet docfx metadata docfx.json
+        shell: pwsh
+
+      - name: Build Documentation - Site
+        run: dotnet docfx build docfx.json
+        shell: pwsh
+
+      - name: Upload Documentation Site
+        uses: actions/upload-artifact@v6
         with:
-          name: nuget-packages
-          path: ./Artifacts/*.nupkg
+          name: docfx-site
+          path: _site
 
-      # Publish to NuGet.org
-      - name: Publish to NuGet.org
-        if: startsWith(github.ref, 'refs/tags/')
-        run: dotnet nuget push ./Artifacts/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
-        env:
-          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
-
-      # Create GitHub Release
-      - name: Create GitHub Release
-        if: startsWith(github.ref, 'refs/tags/')
-        uses: softprops/action-gh-release@v1
+      - name: "Publish Artifacts"
+        uses: actions/upload-artifact@v6
         with:
-          files: ./Artifacts/*.nupkg
-          generate_release_notes: true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          name: ${{matrix.os}}
+          path: "./Artifacts"
+
+      - name: "Publish Binlog"
+        uses: actions/upload-artifact@v6
+        with:
+          name: ${{matrix.os}}-binlog
+          path: "./Binlog"
+
+  # JOB 2: PUSH TO GITHUB PACKAGES
+  push-github-packages:
+    name: "Push GitHub Packages"
+    needs: build
+    if: github.ref == 'refs/heads/main' || github.event_name == 'release'
+    environment:
+      name: "GitHub Packages"
+      url: https://github.com/GamaLearn/GamaLearn.Maui/packages
+    permissions:
+      packages: write
+    runs-on: windows-latest
+    steps:
+      - name: "Download Artifact"
+        uses: actions/download-artifact@v7
+        with:
+          name: "windows-latest"
+      - name: "Dotnet NuGet Add Source"
+        run: dotnet nuget add source https://nuget.pkg.github.com/GamaLearn/index.json --name GitHub --username GamaLearn --password ${{secrets.GITHUB_TOKEN}}
+        shell: pwsh
+      - name: "Dotnet NuGet Push"
+        run: dotnet nuget push .\*.nupkg --api-key ${{ github.token }} --source GitHub --skip-duplicate
+        shell: pwsh
+
+  # JOB 3: PUSH TO NUGET.ORG
+  push-nuget:
+    name: Push to NuGet.org
+    needs: build
+    if: github.event_name == 'release'
+    runs-on: windows-latest
+    environment:
+      name: NuGet
+      url: https://www.nuget.org/packages/GamaLearn.Maui
+    permissions:
+      id-token: write
+    steps:
+      - name: NuGet Login (OIDC)
+        uses: nuget/login@v1
+        id: login
+        with:
+          user: ${{ secrets.NUGET_USER }}
+
+      - name: Download Artifacts
+        uses: actions/download-artifact@v7
+        with:
+          name: "windows-latest"
+
+      - name: Push to NuGet.org
+        run: |
+          Get-ChildItem .\ -Filter *.nupkg |
+          Where-Object { !$_.Name.Contains('preview') } |
+          ForEach-Object { dotnet nuget push $_ --source https://api.nuget.org/v3/index.json --skip-duplicate --api-key ${{ steps.login.outputs.NUGET_API_KEY }} }
+        shell: pwsh
+
+  # JOB 4: DEPLOY DOCUMENTATION TO GITHUB PAGES
+  deploy-docs:
+    name: Deploy Documentation
+    needs: build
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Download Documentation Site
+        uses: actions/download-artifact@v7
+        with:
+          name: docfx-site
+          path: ./_site
+
+      - name: Setup GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages Artifact
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: './_site'
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
