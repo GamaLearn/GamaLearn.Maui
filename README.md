@@ -1,14 +1,13 @@
-<div align="center">
-  <img src="https://raw.githubusercontent.com/GamaLearn/GamaLearn.Maui/main/images/Banner.jpg" alt="GamaLearn.Maui Banner" width="100%">
+![GamaLearn.Maui Banner](https://raw.githubusercontent.com/GamaLearn/GamaLearn.Maui/main/images/Banner.jpg)
 
-  <h1>GamaLearn.Maui.Core</h1>
-  <p><strong>Essential utilities and foundational components for .NET MAUI applications</strong></p>
+# GamaLearn.Maui.Core
 
-  [![Build Status](https://github.com/GamaLearn/GamaLearn.Maui/workflows/Build/badge.svg)](https://github.com/GamaLearn/GamaLearn.Maui/actions)
-  [![NuGet](https://img.shields.io/nuget/v/GamaLearn.Maui.Core.svg)](https://www.nuget.org/packages/GamaLearn.Maui.Core)
-  [![NuGet Downloads](https://img.shields.io/nuget/dt/GamaLearn.Maui.Core.svg)](https://www.nuget.org/packages/GamaLearn.Maui.Core)
-  [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-</div>
+**Essential utilities and foundational components for .NET MAUI applications**
+
+[![Build Status](https://github.com/GamaLearn/GamaLearn.Maui/workflows/Build/badge.svg)](https://github.com/GamaLearn/GamaLearn.Maui/actions)
+[![NuGet](https://img.shields.io/nuget/v/GamaLearn.Maui.Core.svg)](https://www.nuget.org/packages/GamaLearn.Maui.Core)
+[![NuGet Downloads](https://img.shields.io/nuget/dt/GamaLearn.Maui.Core.svg)](https://www.nuget.org/packages/GamaLearn.Maui.Core)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 ---
 

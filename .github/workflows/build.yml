@@ -15,8 +15,8 @@
 #   - Manual trigger     → Build, Test, Pack
 #
 # HOW TO RELEASE:
-#   1. git tag v1.0.0
-#   2. git push origin v1.0.0
+#   1. git tag 1.0.0
+#   2. git push origin 1.0.0
 #   3. Go to GitHub → Releases → Create release from tag
 #   4. Publish release → Workflow publishes to NuGet.org
 
