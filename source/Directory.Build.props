@@ -21,8 +21,9 @@
 		<AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
 	</PropertyGroup>
 
-	<ItemGroup Label="Files">
-		<None Include="..\..\Images\Icon.png" Pack="true" PackagePath="\" />
-		<None Include="..\..\README.md" Pack="true" PackagePath="\" />
+	<!-- Make Icon and README visible in Solution Explorer (packing is handled by root Directory.Build.props) -->
+	<ItemGroup Label="Solution Explorer Files">
+		<None Include="..\..\images\Icon.png" Link="Icon.png" />
+		<None Include="..\..\README.md" Link="README.md" />
 	</ItemGroup>
 </Project>

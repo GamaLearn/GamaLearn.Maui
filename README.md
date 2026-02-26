@@ -1,297 +1,110 @@
-# GamaLearn.Maui.Core
+<div align="center">
+  <img src="https://raw.githubusercontent.com/GamaLearn/GamaLearn.Maui/main/images/Banner.jpg" alt="GamaLearn.Maui Banner" width="100%">
 
-Core utilities and foundational components for .NET MAUI applications.
+  <h1>GamaLearn.Maui.Core</h1>
+  <p><strong>Essential utilities and foundational components for .NET MAUI applications</strong></p>
 
----
-
-## Overview
-
-GamaLearn.Maui.Core provides a comprehensive set of utilities, extension methods, and helper classes designed to simplify common tasks in .NET MAUI development. This library focuses on productivity and code quality with thread-safe operations, reactive collections, validation helpers, and more.
-
----
-
-## Features
-
-### Extension Methods
-- String manipulation and validation
-- Collection operations
-- Task and async helpers
-- Type conversion utilities
-
-### Threading Utilities
-- **Debouncer**: Delay method execution until a pause in calls
-- **Throttler**: Limit method execution frequency
-- Thread-safe operations and synchronization helpers
-
-### Reactive Collections
-- **ObservableRangeCollection**: Enhanced observable collection with bulk operations
-- Change notification optimization
-- Thread-safe collection updates
-
-### Guard Clauses
-- Comprehensive argument validation
-- Null checking
-- Range validation
-- String validation (null, empty, whitespace)
-- Custom validation extensions
-
-### Base Classes & Abstractions
-- MVVM base classes
-- Common interfaces and abstractions
-- Reusable patterns for MAUI apps
-
-### Platform Services
-- **AppRatingService**: Cross-platform in-app rating prompts
-  - Supports iOS, Android, macOS, and Windows
-  - Native platform implementations
-  - Configurable rating triggers
+  [![Build Status](https://github.com/GamaLearn/GamaLearn.Maui/workflows/Build/badge.svg)](https://github.com/GamaLearn/GamaLearn.Maui/actions)
+  [![NuGet](https://img.shields.io/nuget/v/GamaLearn.Maui.Core.svg)](https://www.nuget.org/packages/GamaLearn.Maui.Core)
+  [![NuGet Downloads](https://img.shields.io/nuget/dt/GamaLearn.Maui.Core.svg)](https://www.nuget.org/packages/GamaLearn.Maui.Core)
+  [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+</div>
 
 ---
 
-## Installation
+## 📖 Overview
 
-Add the library to your .NET MAUI project:
+GamaLearn.Maui.Core is a production-ready library providing essential utilities for .NET MAUI development. Built with performance, thread-safety, and developer productivity in mind, it offers:
+
+- **🔄 Threading Utilities** - Debouncer and Throttler for responsive UIs
+- **📦 Reactive Collections** - High-performance observable collections with filtering and sorting
+- **✅ Validation** - Fluent guard clauses for argument validation
+- **🌟 Platform Services** - Cross-platform services (in-app ratings, etc.)
+- **⚡ Performance First** - Optimized for production use with minimal overhead
+
+---
+
+## 🚀 Quick Start
 
 ```bash
 dotnet add package GamaLearn.Maui.Core
 ```
 
-Or via NuGet Package Manager:
-
-```
-Install-Package GamaLearn.Maui.Core
-```
+**[📚 Full Documentation & Examples →](https://gamalearn.github.io/GamaLearn.Maui/)**
 
 ---
 
-## Quick Start
+## 📚 Documentation
 
-### Using Extension Methods
+Comprehensive guides, API reference, and code examples:
 
-```csharp
-using GamaLearn.Extensions;
+- **[Complete Documentation](https://gamalearn.github.io/GamaLearn.Maui/)** - Full guides and API reference
+- **[API Reference](https://gamalearn.github.io/GamaLearn.Maui/api/)** - Detailed API documentation
+- **[Code Examples](https://gamalearn.github.io/GamaLearn.Maui/api/#-usage-examples)** - Practical usage examples
 
-// String extensions
-string text = "  Hello World  ";
-var trimmed = text.TrimSafe(); // Safely trims with null check
+### Featured Components
 
-// Collection extensions
-var items = new List<int> { 1, 2, 3, 4, 5 };
-var hasAny = items.IsNotEmpty(); // Returns true
-```
-
-### Using Guard Clauses
-
-```csharp
-using GamaLearn.Guards;
-
-public void ProcessData(string data, int count)
-{
-    // Throws ArgumentNullException if data is null
-    Guard.Against.Null(data, nameof(data));
-
-    // Throws ArgumentException if data is empty or whitespace
-    Guard.Against.NullOrWhiteSpace(data, nameof(data));
-
-    // Throws ArgumentOutOfRangeException if count is negative
-    Guard.Against.Negative(count, nameof(count));
-}
-```
-
-### Using Debouncer
-
-```csharp
-using GamaLearn.Utilities;
-
-// Create a debouncer with 500ms delay
-var debouncer = new Debouncer(TimeSpan.FromMilliseconds(500));
-
-// In a search box TextChanged event
-private void OnSearchTextChanged(object sender, TextChangedEventArgs e)
-{
-    // Only executes search after user stops typing for 500ms
-    debouncer.Debounce(() => PerformSearch(e.NewTextValue));
-}
-```
-
-### Using Throttler
-
-```csharp
-using GamaLearn.Utilities;
-
-// Create a throttler that allows one call per second
-var throttler = new Throttler(TimeSpan.FromSeconds(1));
-
-// In a button click handler
-private void OnButtonClicked(object sender, EventArgs e)
-{
-    // Only executes once per second, even if clicked multiple times
-    throttler.Throttle(() => PerformAction());
-}
-```
-
-### Using ObservableRangeCollection
-
-```csharp
-using GamaLearn.Collections;
-
-// Create an observable collection with bulk operation support
-var items = new ObservableRangeCollection<string>();
-
-// Add multiple items with a single notification
-items.AddRange(new[] { "Item1", "Item2", "Item3" });
-
-// Replace entire collection efficiently
-items.ReplaceRange(newItems);
-
-// Remove multiple items at once
-items.RemoveRange(itemsToRemove);
-```
-
-### Using AppRatingService
-
-```csharp
-using GamaLearn.Services;
-
-// In your MauiProgram.cs
-builder.Services.AddSingleton<IAppRatingService, AppRatingService>();
-
-// In your ViewModel or Page
-public class MainViewModel
-{
-    private readonly IAppRatingService _ratingService;
-
-    public MainViewModel(IAppRatingService ratingService)
-    {
-        _ratingService = ratingService;
-    }
-
-    public async Task RequestRating()
-    {
-        // Shows native rating dialog on supported platforms
-        await _ratingService.RequestRatingAsync();
-    }
-}
-```
+| Component | Description | Learn More |
+|-----------|-------------|------------|
+| **Debouncer** | Delay execution until pause in calls | [Docs →](https://gamalearn.github.io/GamaLearn.Maui/api/core/Debouncer.html) |
+| **Throttler** | Rate-limit method execution | [Docs →](https://gamalearn.github.io/GamaLearn.Maui/api/core/Throttler.html) |
+| **ReactiveCollection** | Filtering & sorting collection | [Docs →](https://gamalearn.github.io/GamaLearn.Maui/api/core/ReactiveCollection.html) |
+| **ObservableRangeCollection** | Bulk observable operations | [Docs →](https://gamalearn.github.io/GamaLearn.Maui/api/core/ObservableRangeCollection.html) |
+| **Guard** | Fluent argument validation | [Docs →](https://gamalearn.github.io/GamaLearn.Maui/api/core/Guard.html) |
+| **AppRatingService** | Cross-platform in-app ratings | [Docs →](https://gamalearn.github.io/GamaLearn.Maui/api/core/AppRatingService.html) |
 
 ---
 
-## Documentation
+## 🖥️ Platform Support
 
-Comprehensive API documentation is available:
+| Platform | Support | Min Version |
+|----------|---------|-------------|
+| Android | ✅ | API 26+ (Android 8.0+) |
+| iOS | ✅ | 15.0+ |
+| MacCatalyst | ✅ | 11.0+ |
+| Windows | ✅ | 10 (Build 19041+) |
 
-- **[API Reference](docs/api/README.md)** - Complete API documentation index
-
-**Core Utilities:**
-  - [Debouncer](docs/api/core/Debouncer.md) - Debounce rapid method calls
-  - [Throttler](docs/api/core/Throttler.md) - Throttle method execution
-  - [Guard](docs/api/core/Guard.md) - Argument validation
-  - [ObservableRangeCollection](docs/api/core/ObservableRangeCollection.md) - Efficient bulk operations
-  - [AppRatingService](docs/api/core/AppRatingService.md) - Cross-platform app rating
+**Requirements:** .NET 9.0+ | .NET MAUI workload
 
 ---
 
-## Publishing Versions
+## 🤝 Contributing
 
-This library uses automatic versioning with [MinVer](https://github.com/adamralph/minver) and GitHub Actions.
+We welcome contributions! Please read our guidelines before submitting:
 
-### How to Release a New Version
+- **[Contributing Guide](CONTRIBUTING.md)** - How to contribute, coding standards, and development setup
+- **[Code of Conduct](CODE_OF_CONDUCT.md)** - Community guidelines
+- **[Report Issues](https://github.com/GamaLearn/GamaLearn.Maui/issues)** - Bug reports and feature requests
 
-**1. Ensure all changes are committed and pushed to the main branch:**
-```bash
-git add .
-git commit -m "Your commit message"
-git push origin main
-```
-
-**2. Create and push a version tag:**
-
-For a **stable release**:
-```bash
-git tag 1.0.0
-git push origin 1.0.0
-```
-
-For a **preview/beta release**:
-```bash
-git tag 1.0.0-preview
-git push origin 1.0.0-preview
-```
-
-**3. GitHub Actions will automatically:**
-- Build the solution
-- Run tests (when available)
-- Pack NuGet packages with the version from the tag
-- Publish to NuGet.org
-- Create a GitHub Release with the packages
-
-### Version Tag Guidelines
-
-- Use semantic versioning: `MAJOR.MINOR.PATCH` (e.g., 1.0.0, 2.1.3)
-- Preview versions: `MAJOR.MINOR.PATCH-preview` (e.g., 1.0.0-preview, 2.0.0-beta)
-- Tags must be pushed via command line (not via GitHub web UI)
-- Always commit and push changes before creating tags
-- Tags should point to commits that already exist on the remote repository
-
-### Deleting Tags (if needed)
+### Development Setup
 
 ```bash
-# Delete local tag
-git tag -d 1.0.0
-
-# Delete remote tag
-git push origin --delete 1.0.0
+git clone https://github.com/GamaLearn/GamaLearn.Maui.git
+cd GamaLearn.Maui
+dotnet restore
+dotnet build
+dotnet test
 ```
 
 ---
 
-## Platform Support
+## 📄 License
 
-- **iOS** 15.0+
-- **Android** API 21+ (Android 5.0)
-- **macOS** 10.15+
-- **Windows** 10.0.19041.0+ (Windows 10, version 2004)
+This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
 
 ---
 
-## Requirements
+## 🔗 Links
 
-- .NET 9.0 or later
-- .NET MAUI workload installed
-
-To install the MAUI workload:
-```bash
-dotnet workload install maui
-```
+- [📖 Documentation](https://gamalearn.github.io/GamaLearn.Maui/)
+- [📦 NuGet Package](https://www.nuget.org/packages/GamaLearn.Maui.Core)
+- [📋 Release Notes](https://github.com/GamaLearn/GamaLearn.Maui/releases)
+- [💬 Discussions](https://github.com/GamaLearn/GamaLearn.Maui/discussions)
+- [🐛 Report Issues](https://github.com/GamaLearn/GamaLearn.Maui/issues)
 
 ---
 
-## Contributing
-
-We welcome contributions! Please feel free to submit pull requests or open issues for bugs and feature requests.
-
----
-
-## License
-
-MIT License
-
-Copyright (c) 2025 GamaLearn
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+<div align="center">
+  <p>Made with ❤️ by <a href="https://github.com/GamaLearn">GamaLearn</a></p>
+  <p>Copyright © 2026 GamaLearn. All rights reserved.</p>
+</div>

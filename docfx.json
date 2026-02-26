@@ -13,7 +13,7 @@
           ]
         }
       ],
-      "dest": "api",
+      "dest": "docs/api/generated",
       "disableGitFeatures": false,
       "disableDefaultFilter": false,
       "properties": {
@@ -25,21 +25,40 @@
     "content": [
       {
         "files": [
-          "api/**.yml",
-          "api/index.md"
-        ]
+          "*.md",
+          "toc.yml"
+        ],
+        "src": "docs"
       },
       {
         "files": [
-          "README.md"
-        ]
+          "**/*.md",
+          "**/toc.yml"
+        ],
+        "src": "docs/api",
+        "dest": "api"
+      },
+      {
+        "files": [
+          "**/*.yml"
+        ],
+        "src": "docs/api/generated",
+        "dest": "api/generated"
       }
     ],
     "resource": [
       {
         "files": [
-          "images/**"
+          "images/**",
+          "assets/**"
         ]
+      },
+      {
+        "files": [
+          "images/**",
+          "assets/**"
+        ],
+        "src": "docs"
       }
     ],
     "output": "_site",
@@ -50,7 +69,13 @@
     "globalMetadata": {
       "_appName": "GamaLearn.Maui",
       "_appTitle": "GamaLearn.Maui Documentation",
-      "_enableSearch": true
+      "_enableSearch": true,
+      "_appFooter": "© GamaLearn - All rights reserved",
+      "_appLogoPath": "images/Icon.png",
+      "_gitContribute": {
+        "repo": "https://github.com/GamaLearn/GamaLearn.Maui",
+        "branch": "main"
+      }
     },
     "markdownEngineProperties": {
       "markdigExtensions": [

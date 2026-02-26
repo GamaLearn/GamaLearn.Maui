@@ -36,7 +36,7 @@ dotnet add package GamaLearn.Maui.Core
 
 ### Registration
 
-Register the service in [MauiProgram.cs](MauiProgram.cs):
+Register the service in your `MauiProgram.cs`:
 
 ```csharp
 using GamaLearn.Services;

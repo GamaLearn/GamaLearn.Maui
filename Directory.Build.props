@@ -29,4 +29,9 @@
     <ItemGroup Label="Package References">
         <PackageReference Include="MinVer" PrivateAssets="all" />
     </ItemGroup>
+
+    <ItemGroup Label="Package Assets">
+        <None Include="$(MSBuildThisFileDirectory)images\Icon.png" Pack="true" PackagePath="\" Visible="false" />
+        <None Include="$(MSBuildThisFileDirectory)README.md" Pack="true" PackagePath="\" Visible="false" />
+    </ItemGroup>
 </Project>
