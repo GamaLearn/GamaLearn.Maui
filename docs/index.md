@@ -9,8 +9,9 @@ GamaLearn.Maui provides essential building blocks for .NET MAUI development, inc
 - **Threading Utilities** - Debouncing and throttling for efficient UI updates
 - **Collections** - High-performance observable collections with bulk operations
 - **Guard Clauses** - Robust argument validation utilities
-- **Services** - Cross-platform services like app rating prompts
-- **Extensions** - Helpful extension methods for common tasks
+- **Services** - Cross-platform services (battery, device info, app ratings)
+- **Extensions** - Color manipulation, string utilities, and more
+- **Platform Helpers** - Safe area insets and keyboard management
 
 ## 📦 Installation
 
@@ -24,6 +25,73 @@ Or via Package Manager Console:
 
 ```powershell
 Install-Package GamaLearn.Maui.Core
+```
+
+## ⚙️ Setup
+
+### Register Services (Optional)
+
+If you're using services like `BatteryService` or `DeviceInfoService`, register them in your `MauiProgram.cs`:
+
+```csharp
+using GamaLearn;
+
+public static class MauiProgram
+{
+    public static MauiApp CreateMauiApp()
+    {
+        var builder = MauiApp.CreateBuilder();
+        builder
+            .UseMauiApp<App>()
+            .ConfigureFonts(fonts =>
+            {
+                fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
+            });
+
+        // Register individual services
+        builder.Services.AddBatteryService();
+        builder.Services.AddDeviceInfoService();
+
+        // Or register all core services at once
+        builder.Services.AddGamaLearnCoreServices();
+
+        // Register app rating service with configuration
+        builder.Services.AddAppRatingService(options =>
+        {
+            options.IOSAppId = "123456789";
+            options.WindowsProductId = "9NBLGGH4NNS1";
+            options.AndroidPackageName = "com.yourcompany.yourapp";
+        });
+
+        return builder.Build();
+    }
+}
+```
+
+### Android Keyboard Monitoring (Optional)
+
+If using `KeyboardHelper` on Android, add monitoring in your `MainActivity.cs`:
+
+```csharp
+using GamaLearn.Helpers;
+
+protected override void OnCreate(Bundle? savedInstanceState)
+{
+    base.OnCreate(savedInstanceState);
+
+    // Start keyboard monitoring
+    var rootView = Window?.DecorView?.FindViewById(Android.Resource.Id.Content);
+    if (rootView != null)
+    {
+        KeyboardHelper.StartMonitoring(rootView);
+    }
+}
+
+protected override void OnDestroy()
+{
+    KeyboardHelper.StopMonitoring();
+    base.OnDestroy();
+}
 ```
 
 ## 📚 Documentation Sections

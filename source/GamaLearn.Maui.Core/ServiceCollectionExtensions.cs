@@ -98,4 +98,62 @@ public static class ServiceCollectionExtensions
 #endif
     }
     #endregion
+
+    #region Battery Service
+    /// <summary>
+    /// Adds the Battery Service to the service collection.
+    /// </summary>
+    /// <param name="services">The service collection.</param>
+    /// <returns>The service collection for chaining.</returns>
+    public static IServiceCollection AddBatteryService(this IServiceCollection services)
+    {
+        ArgumentNullException.ThrowIfNull(services);
+
+        services.TryAddSingleton<IBatteryService>(sp =>
+        {
+            ILogger<BatteryService>? logger = sp.GetService<ILoggerFactory>()?.CreateLogger<BatteryService>();
+            return new BatteryService(logger);
+        });
+
+        return services;
+    }
+    #endregion
+
+    #region Device Info Service
+    /// <summary>
+    /// Adds the Device Info Service to the service collection.
+    /// </summary>
+    /// <param name="services">The service collection.</param>
+    /// <returns>The service collection for chaining.</returns>
+    public static IServiceCollection AddDeviceInfoService(this IServiceCollection services)
+    {
+        ArgumentNullException.ThrowIfNull(services);
+
+        services.TryAddSingleton<IDeviceInfoService>(sp =>
+        {
+            ILogger<DeviceInfoService>? logger = sp.GetService<ILoggerFactory>()?.CreateLogger<DeviceInfoService>();
+            return new DeviceInfoService(logger);
+        });
+
+        return services;
+    }
+    #endregion
+
+    #region All Core Services
+    /// <summary>
+    /// Adds all GamaLearn.Maui.Core services to the service collection.
+    /// Includes: BatteryService, DeviceInfoService.
+    /// </summary>
+    /// <param name="services">The service collection.</param>
+    /// <returns>The service collection for chaining.</returns>
+    public static IServiceCollection AddGamaLearnCoreServices(this IServiceCollection services)
+    {
+        ArgumentNullException.ThrowIfNull(services);
+
+        services.AddBatteryService();
+        services.AddDeviceInfoService();
+
+        return services;
+    }
+    #endregion
 }

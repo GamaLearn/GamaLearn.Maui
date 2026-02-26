@@ -19,7 +19,9 @@ GamaLearn.Maui.Core is a production-ready library providing essential utilities 
 - **🔄 Threading Utilities** - Debouncer and Throttler for responsive UIs
 - **📦 Reactive Collections** - High-performance observable collections with filtering and sorting
 - **✅ Validation** - Fluent guard clauses for argument validation
-- **🌟 Platform Services** - Cross-platform services (in-app ratings, etc.)
+- **🌟 Platform Services** - Battery, device info, and in-app ratings
+- **🎨 Extensions** - Color manipulation, string utilities, and more
+- **📱 Platform Helpers** - Safe area insets and keyboard management
 - **⚡ Performance First** - Optimized for production use with minimal overhead
 
 ---
@@ -52,6 +54,11 @@ Comprehensive guides, API reference, and code examples:
 | **ObservableRangeCollection** | Bulk observable operations | [Docs →](https://gamalearn.github.io/GamaLearn.Maui/api/core/ObservableRangeCollection.html) |
 | **Guard** | Fluent argument validation | [Docs →](https://gamalearn.github.io/GamaLearn.Maui/api/core/Guard.html) |
 | **AppRatingService** | Cross-platform in-app ratings | [Docs →](https://gamalearn.github.io/GamaLearn.Maui/api/core/AppRatingService.html) |
+| **BatteryService** | Battery level and status monitoring | [Docs →](https://gamalearn.github.io/GamaLearn.Maui/api/core/BatteryService.html) |
+| **DeviceInfoService** | Device information and characteristics | [Docs →](https://gamalearn.github.io/GamaLearn.Maui/api/core/DeviceInfoService.html) |
+| **ColorExtensions** | Color manipulation (lighten, darken, blend) | [Docs →](https://gamalearn.github.io/GamaLearn.Maui/api/core/ColorExtensions.html) |
+| **SafeAreaHelper** | Safe area insets for notches & system UI | [Docs →](https://gamalearn.github.io/GamaLearn.Maui/api/core/SafeAreaHelper.html) |
+| **KeyboardHelper** | Show/hide keyboard, get height | [Docs →](https://gamalearn.github.io/GamaLearn.Maui/api/core/KeyboardHelper.html) |
 
 ---
 

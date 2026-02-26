@@ -68,6 +68,45 @@ Cross-platform services for common app scenarios.
   - Respectful rating prompts (honors user preferences)
   - Full event tracking for analytics
 
+- **[BatteryService](core/BatteryService.md)** - Battery level and status monitoring
+  - Real-time battery level and charging state
+  - Power source detection (AC, battery, wireless)
+  - Energy saver status monitoring
+  - Battery change events for reactive updates
+
+- **[DeviceInfoService](core/DeviceInfoService.md)** - Device information and characteristics
+  - Device model, manufacturer, and platform details
+  - Device type detection (phone, tablet, desktop)
+  - Platform-specific version information
+  - Stable device identification for analytics
+
+### 🎨 Extensions
+
+Extension methods for common tasks and utilities.
+
+- **[ColorExtensions](core/ColorExtensions.md)** - Color manipulation and utilities
+  - Lighten, darken, and blend colors
+  - Alpha channel manipulation
+  - Luminance calculation and contrast checking
+  - Hex color parsing and formatting
+  - Accessibility helpers for text contrast
+
+### 📱 Platform Helpers
+
+Cross-platform helpers for device-specific features.
+
+- **[SafeAreaHelper](core/SafeAreaHelper.md)** - Safe area insets management
+  - Get safe area insets for notches and system UI
+  - Automatic padding adjustment for views
+  - Status bar and navigation bar height detection
+  - Support for display cutouts and rounded corners
+
+- **[KeyboardHelper](core/KeyboardHelper.md)** - Keyboard control and monitoring
+  - Show and hide soft keyboard programmatically
+  - Get current keyboard height
+  - Keyboard visibility events
+  - Platform-specific keyboard handling
+
 ---
 
 ## 🔗 Quick Links

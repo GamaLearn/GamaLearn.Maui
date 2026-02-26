@@ -1,0 +1,19 @@
+/* Custom styles for GamaLearn.Maui documentation */
+
+/* Logo sizing - constrain to navbar height */
+.navbar-brand img,
+.navbar-brand > img {
+    max-height: 40px !important;
+    height: auto !important;
+    width: auto !important;
+    max-width: 200px !important;
+    object-fit: contain;
+}
+
+/* Ensure logo doesn't overflow in mobile view */
+@media (max-width: 768px) {
+    .navbar-brand img,
+    .navbar-brand > img {
+        max-height: 32px !important;
+    }
+}
